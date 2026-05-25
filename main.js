@@ -229,6 +229,8 @@ async function botMessage(msg) {
     const apires = await fetch("https://official-joke-api.appspot.com/random_joke");
     if (!apires.ok) {
       console.log('Joke API fail')
+      renderMessage("ChatBot", "Joke data unavailable");
+      return;
     }
     const data = await apires.json();
     renderMessage("ChatBot", `${data.setup} - ${data.punchline}`);
@@ -243,6 +245,8 @@ async function botMessage(msg) {
     const data = await apires.json();
     if (!apires.ok) {
       console.log('Fact API fail')
+      renderMessage("ChatBot", "Fact data unavailable");
+      return;
     }
     renderMessage("ChatBot", `${data.text}`);
   }
@@ -251,6 +255,8 @@ async function botMessage(msg) {
     const data = await apires.json();
     if (!apires.ok) {
       console.log('Dog API fail')
+      renderMessage("ChatBot", "Dog data unavailable");
+      return;
     }
 
     renderMessage("ChatBot", `<a href="${data.message}" target="_blank">${data.message}</a>`);
@@ -260,6 +266,8 @@ async function botMessage(msg) {
     const data = await apires.json();
     if (!apires.ok) {
       console.log('Cat API fail')
+      renderMessage("ChatBot", "Cat data unavailabel");
+      return;
     }
 
     renderMessage("ChatBot", `<a href="${data[0].url}" target="_blank">${data[0].url}</a>`);
@@ -270,6 +278,8 @@ async function botMessage(msg) {
     const data = await apires.json();
     if (!apires.ok) {
       console.log('Weather API fail')
+      renderMessage("ChatBot", "Weather data unavailable");
+      return;
     }
 
     const temp = data.current_weather.temperature;
