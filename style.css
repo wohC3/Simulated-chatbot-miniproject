@@ -18,6 +18,8 @@ body {
 
 .dark {
   background: dimgray;
+  /*fix border popout*/
+  border: 2px solid transparent;
 }
 
 .dark:focus {
@@ -50,20 +52,16 @@ body {
 }
 
 .message {
-  padding: 8px 12px;
+  padding: 2px 12px;
+  /*fix overflow to not be horizontal outside chatArea*/
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-.user-message {
-  background: lightgreen;
-  align-self: flex-start;
-}
 
-.other-message {
-  background: gray;
-  align-self: flex-end;
-}
-
-.botm-message {
-  background: darkslateblue;
-  align-self: flex-start;
+.chatBot {
+  border-left: 1px solid cornflowerblue;
+  color: mediumaquamarine;
+  font-weight: bold;
 }

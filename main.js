@@ -138,6 +138,101 @@ const randomMessages = [
   "CSS specificity is a silent killer",
   "Bootstrap saved me on deadlines multiple times"
 ];
+//Array with random quotes;
+const quotes = [
+  "Simplicity is the soul of efficiency.",
+  "Code is like humor. When you have to explain it, it’s bad.",
+  "Fix the cause, not the symptom.",
+  "Simplicity is better than complexity.",
+  "The best error message is the one that never shows up.",
+  "First, solve the problem. Then, write the code.",
+  "Suffering is part of debugging.",
+  "Every great developer you know got there by solving problems they were unqualified to solve until they actually did it.",
+  "Programming isn’t about what you know; it’s about what you can figure out.",
+  "The most dangerous phrase in the language is: ‘It works on my machine.’",
+  "Debugging is like being the detective in a crime movie where you are also the murderer.",
+  "Experience is the name everyone gives to their mistakes.",
+  "The computer was born to solve problems that did not exist before.",
+  "A good programmer is someone who always looks both ways before crossing a one-way street.",
+  "If debugging is the process of removing bugs, then programming must be the process of putting them in.",
+  "The only way to learn a new programming language is by writing programs in it.",
+  "Talk is cheap. Show me the code.",
+  "Code never lies, comments sometimes do.",
+  "Make it work, make it right, make it fast.",
+  "Before software can be reusable it first has to be usable."
+];
+function renderMessage(username, msg) {
+  let createMsg = document.createElement('div');
+  createMsg.classList.add('message');
+  createMsg.innerText = `${username}: ${msg}`;
+  chatArea.appendChild(createMsg);
+  //force container to scroll down for last msg
+  chatArea.scrollTop = chatArea.scrollHeight;
+  if (username == "ChatBot") {
+    createMsg.classList.add('chatBot');
+  }
+}
+
+function sendMessage() {
+  inputField.value.trim();
+  if (inputField.value === "") {
+    return;
+  }
+  else if (inputField.value.length > 500) {
+    return;
+  }
+
+  renderMessage("Me", inputField.value);
+  botMessage(inputField.value);
+  inputField.value = "";
+
+}
+
+sendBtn.addEventListener('click', () => {
+  sendMessage();
+});
+
+inputField.addEventListener('keydown', (e) => {
+  if (e.key == "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+function simulateMessage() {
+
+  //get random index for arrays
+  let randomUserIndex = Math.floor(Math.random() * fakeUsers.length);
+  let randomMessageIndex = Math.floor(Math.random() * randomMessages.length);
+  //get random user with the random index
+  let randomUser = fakeUsers[randomUserIndex];
+  let randomMessage = randomMessages[randomMessageIndex];
 
 
+  renderMessage(randomUser, randomMessage);
+  setTimeout(simulateMessage, timeoutDelay);
+}
+
+//delay is 1-5s 
+let timeoutDelay = Math.floor(Math.random() * 4000) + 100;
+simulateMessage();
+
+async function botMessage(msg) {
+  if (msg === "!commands") {
+    renderMessage("ChatBot", "List of commands: !joke, !quote,");
+  }
+  else if (msg === "!joke") {
+    const apires = await fetch("https://official-joke-api.appspot.com/random_joke");
+    if (!apires.ok) {
+      console.log('API fail')
+    }
+    const data = await apires.json();
+    renderMessage("ChatBot", `${data.setup} - ${data.punchline}`);
+  }
+  else if (msg === "!quote") {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[randomIndex]
+    renderMessage("ChatBot", quote);
+  }
+}
 
