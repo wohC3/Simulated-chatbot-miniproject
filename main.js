@@ -162,12 +162,16 @@ const quotes = [
   "Before software can be reusable it first has to be usable."
 ];
 function renderMessage(username, msg) {
+  //check if user is near bottom, if so auto scroll
+  const isNearBottom = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight < 80;
+  if (isNearBottom) {
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
   let createMsg = document.createElement('div');
   createMsg.classList.add('message');
-  createMsg.innerText = `${username}: ${msg}`;
+  //innerHTML to make !dog, !cat be clickable links
+  createMsg.innerHTML = `${username}: ${msg}`;
   chatArea.appendChild(createMsg);
-  //force container to scroll down for last msg
-  chatArea.scrollTop = chatArea.scrollHeight;
   if (username == "ChatBot") {
     createMsg.classList.add('chatBot');
   }
@@ -208,23 +212,23 @@ function simulateMessage() {
   let randomUser = fakeUsers[randomUserIndex];
   let randomMessage = randomMessages[randomMessageIndex];
 
+  //delay is 1-5s 
+  let timeoutDelay = Math.floor(Math.random() * 4000) + 100;
 
   renderMessage(randomUser, randomMessage);
   setTimeout(simulateMessage, timeoutDelay);
 }
 
-//delay is 1-5s 
-let timeoutDelay = Math.floor(Math.random() * 4000) + 100;
 simulateMessage();
 
 async function botMessage(msg) {
   if (msg === "!commands") {
-    renderMessage("ChatBot", "List of commands: !joke, !quote,");
+    renderMessage("ChatBot", "List of commands: !joke, !quote, !fact, !dog, !cat, !weather(varna only currently)");
   }
   else if (msg === "!joke") {
     const apires = await fetch("https://official-joke-api.appspot.com/random_joke");
     if (!apires.ok) {
-      console.log('API fail')
+      console.log('Joke API fail')
     }
     const data = await apires.json();
     renderMessage("ChatBot", `${data.setup} - ${data.punchline}`);
@@ -232,7 +236,45 @@ async function botMessage(msg) {
   else if (msg === "!quote") {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const quote = quotes[randomIndex]
-    renderMessage("ChatBot", quote);
+    renderMessage("ChatBot", `"${quote}"`);
+  }
+  else if (msg === "!fact") {
+    const apires = await fetch("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en");
+    const data = await apires.json();
+    if (!apires.ok) {
+      console.log('Fact API fail')
+    }
+    renderMessage("ChatBot", `${data.text}`);
+  }
+  else if (msg === "!dog") {
+    const apires = await fetch("https://dog.ceo/api/breeds/image/random")
+    const data = await apires.json();
+    if (!apires.ok) {
+      console.log('Dog API fail')
+    }
+
+    renderMessage("ChatBot", `<a href="${data.message}" target="_blank">${data.message}</a>`);
+  }
+  else if (msg === "!cat") {
+    const apires = await fetch("https://api.thecatapi.com/v1/images/search")
+    const data = await apires.json();
+    if (!apires.ok) {
+      console.log('Cat API fail')
+    }
+
+    renderMessage("ChatBot", `<a href="${data[0].url}" target="_blank">${data[0].url}</a>`);
+  }
+  //hard coded with coords to Varna
+  else if (msg === "!weather") {
+    const apires = await fetch("https://api.open-meteo.com/v1/forecast?latitude=43.2141&longitude=27.9147&current_weather=true")
+    const data = await apires.json();
+    if (!apires.ok) {
+      console.log('Weather API fail')
+    }
+
+    const temp = data.current_weather.temperature;
+    const wind = data.current_weather.windspeed;
+    renderMessage("ChatBot", `Temp: ${temp}C | Windspeed: ${wind} km/h`);
   }
 }
 
