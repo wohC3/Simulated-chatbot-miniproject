@@ -1,0 +1,69 @@
+body {
+  height: 100vh;
+}
+
+.chat-container {
+  width: 100%;
+  background: black;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid dimgray;
+}
+
+.chat-header {
+  background: black;
+  font-weight: bold;
+  border-bottom: 1px solid dimgray;
+}
+
+.dark {
+  background: dimgray;
+}
+
+.dark:focus {
+  border: 2px solid purple;
+  background: dimgray;
+}
+
+.dark::placeholder {
+  color: ghostwhite;
+}
+
+.btn-color {
+  background: purple;
+}
+
+.btn-color:hover {
+  background: mediumpurple;
+}
+
+#chatArea {
+  height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-input {
+  border-top: 1px solid dimgray;
+}
+
+.message {
+  padding: 8px 12px;
+}
+
+.user-message {
+  background: lightgreen;
+  align-self: flex-start;
+}
+
+.other-message {
+  background: gray;
+  align-self: flex-end;
+}
+
+.botm-message {
+  background: darkslateblue;
+  align-self: flex-start;
+}
