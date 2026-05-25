@@ -1,6 +1,7 @@
 const chatArea = document.querySelector("#chatArea");
 const inputField = document.querySelector("#messageInput");
 const sendBtn = document.querySelector("#sendBtn");
+const chatStatus = document.querySelector("#chatStatus");
 //Array with fake users;
 const fakeUsers = [
   "Mike",
@@ -166,6 +167,9 @@ function renderMessage(username, msg) {
   const isNearBottom = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight < 80;
   if (isNearBottom) {
     chatArea.scrollTop = chatArea.scrollHeight;
+    chatStatus.innerText = "";
+  } else {
+    chatStatus.innerText = "Chat paused due to scroll";
   }
   let createMsg = document.createElement('div');
   createMsg.classList.add('message');

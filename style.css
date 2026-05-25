@@ -65,3 +65,11 @@ body {
   color: mediumaquamarine;
   font-weight: bold;
 }
+
+#chatStatus {
+  font-size: 18px;
+  color: gray;
+  padding: 20px;
+  height: 16px;
+  text-align: center;
+}
