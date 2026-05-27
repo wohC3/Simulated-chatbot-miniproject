@@ -165,12 +165,7 @@ const quotes = [
 function renderMessage(username, msg) {
   //check if user is near bottom, if so auto scroll
   const isNearBottom = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight < 80;
-  if (isNearBottom) {
-    chatArea.scrollTop = chatArea.scrollHeight;
-    chatStatus.innerText = "";
-  } else {
-    chatStatus.innerText = "Chat paused due to scroll";
-  }
+
   let createMsg = document.createElement('div');
   createMsg.classList.add('message');
   //innerHTML to make !dog, !cat be clickable links
@@ -179,19 +174,25 @@ function renderMessage(username, msg) {
   if (username == "ChatBot") {
     createMsg.classList.add('chatBot');
   }
+  if (isNearBottom) {
+    chatArea.scrollTop = chatArea.scrollHeight;
+    chatStatus.innerText = "";
+  } else {
+    chatStatus.innerText = "Chat paused due to scroll";
+  }
 }
 
 function sendMessage() {
-  inputField.value.trim();
-  if (inputField.value === "") {
+  let msg = inputField.value.trim();
+  if (msg === "") {
     return;
   }
-  else if (inputField.value.length > 500) {
+  else if (msg.length > 500) {
     return;
   }
 
-  renderMessage("Me", inputField.value);
-  botMessage(inputField.value);
+  renderMessage("Me", msg);
+  botMessage(msg);
   inputField.value = "";
 
 }
@@ -202,7 +203,6 @@ sendBtn.addEventListener('click', () => {
 
 inputField.addEventListener('keydown', (e) => {
   if (e.key == "Enter") {
-    e.preventDefault();
     sendMessage();
   }
 });
